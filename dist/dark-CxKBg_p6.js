@@ -1,0 +1,179 @@
+const r = {
+  50: "#fdf2f8",
+  100: "#fce7f3",
+  200: "#fbcfe8",
+  300: "#f9a8d4",
+  400: "#f472b6",
+  500: "#ec4899",
+  600: "#e64fa9",
+  700: "#e64fa9",
+  800: "#be185d",
+  900: "#9d174d"
+}, i = {
+  50: "#f5f3ff",
+  100: "#ede9fe",
+  200: "#ddd6fe",
+  300: "#c4b5fd",
+  400: "#a78bfa",
+  500: "#8b5cf6",
+  600: "#7c3aed",
+  700: "#6d29d9",
+  800: "#5b21b6",
+  900: "#4c1d95"
+}, o = {
+  50: "#fafafa",
+  100: "#f4f4f5",
+  200: "#e4e4e7",
+  300: "#d4d4d8",
+  400: "#a1a1aa",
+  500: "#71717a",
+  600: "#52525b",
+  700: "#3f3f46",
+  800: "#27272a",
+  900: "#18181b",
+  950: "#09090b"
+}, e = {
+  success: "#059669",
+  warning: "#d97706",
+  error: "#dc2626",
+  info: "#2563eb"
+}, g = {
+  discover: "#6366f1",
+  define: "#8b5cf6",
+  develop: "#0891b2",
+  deliver: "#059669"
+}, m = {
+  sans: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif",
+  mono: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
+}, b = {
+  xs: "0.75rem",
+  // 12px
+  sm: "0.8125rem",
+  // 13px
+  base: "0.875rem",
+  // 14px
+  md: "1rem",
+  // 16px
+  lg: "1.125rem",
+  // 18px
+  xl: "1.25rem",
+  // 20px
+  "2xl": "1.5rem",
+  // 24px
+  "3xl": "2rem",
+  // 32px
+  "4xl": "2.5rem",
+  // 40px
+  "5xl": "3rem"
+  // 48px
+}, x = {
+  light: 300,
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700
+}, p = {
+  tight: 1.2,
+  snug: 1.3,
+  normal: 1.5,
+  relaxed: 1.625
+}, y = {
+  tight: "-0.03em",
+  normal: "0",
+  wide: "0.025em",
+  wider: "0.05em"
+}, h = {
+  none: "0px",
+  sm: "4px",
+  md: "6px",
+  lg: "8px",
+  xl: "12px",
+  "2xl": "16px",
+  full: "9999px"
+}, u = {
+  none: "0px",
+  thin: "1px",
+  medium: "2px"
+}, c = {
+  sm: "0 1px 2px rgba(0, 0, 0, 0.05)",
+  md: "0 2px 8px rgba(0, 0, 0, 0.12)",
+  lg: "0 8px 24px rgba(0, 0, 0, 0.15)",
+  xl: "0 12px 32px rgba(0, 0, 0, 0.2)"
+}, l = {
+  sm: "0 1px 2px rgba(0, 0, 0, 0.2)",
+  md: "0 2px 8px rgba(0, 0, 0, 0.4)",
+  lg: "0 8px 24px rgba(0, 0, 0, 0.5)",
+  xl: "0 12px 32px rgba(0, 0, 0, 0.6)"
+}, S = {
+  colorPrimary: r[700],
+  colorPrimaryHover: r[800],
+  colorPrimaryActive: r[900],
+  colorPrimaryBg: r[50],
+  colorBgContainer: "#ffffff",
+  colorBgLayout: "#f8f7fc",
+  colorBgElevated: "#ffffff",
+  colorBorder: o[300],
+  colorBorderSecondary: o[200],
+  colorText: o[900],
+  colorTextSecondary: o[600],
+  // 7:1 contrast on white
+  colorTextTertiary: o[500],
+  // 4.6:1 contrast
+  colorTextDisabled: o[400],
+  // 3.0:1 (acceptable for disabled)
+  colorFill: "rgba(0, 0, 0, 0.04)",
+  colorFillSecondary: "rgba(0, 0, 0, 0.02)",
+  colorFillTertiary: "rgba(0, 0, 0, 0.01)",
+  colorSuccess: e.success,
+  colorWarning: e.warning,
+  colorError: e.error,
+  colorInfo: e.info,
+  shadow: c.md,
+  shadowLg: c.lg
+};
+function f(a, s) {
+  const n = parseInt(a.slice(1, 3), 16), t = parseInt(a.slice(3, 5), 16), d = parseInt(a.slice(5, 7), 16);
+  return `rgba(${n}, ${t}, ${d}, ${s})`;
+}
+const T = {
+  colorPrimary: r[500],
+  colorPrimaryHover: r[400],
+  colorPrimaryActive: r[600],
+  colorPrimaryBg: f(r[500], 0.1),
+  colorBgContainer: o[900],
+  colorBgLayout: o[950],
+  colorBgElevated: o[800],
+  colorBorder: o[600],
+  colorBorderSecondary: o[700],
+  colorText: "rgba(255, 255, 255, 0.87)",
+  colorTextSecondary: "rgba(255, 255, 255, 0.75)",
+  colorTextTertiary: "rgba(255, 255, 255, 0.60)",
+  colorTextDisabled: "rgba(255, 255, 255, 0.45)",
+  colorFill: "rgba(255, 255, 255, 0.12)",
+  colorFillSecondary: "rgba(255, 255, 255, 0.08)",
+  colorFillTertiary: "rgba(255, 255, 255, 0.04)",
+  colorSuccess: "#52c41a",
+  colorWarning: "#faad14",
+  colorError: "#ff4d4f",
+  colorInfo: "#1890ff",
+  shadow: l.md,
+  shadowLg: l.lg
+};
+export {
+  e as a,
+  r as b,
+  b as c,
+  x as d,
+  h as e,
+  m as f,
+  c as g,
+  S as h,
+  l as i,
+  T as j,
+  u as k,
+  p as l,
+  y as m,
+  o as n,
+  g as p,
+  i as s
+};

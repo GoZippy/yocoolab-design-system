@@ -1,0 +1,128 @@
+/* =========================
+   FOCUS INDICATORS
+   ========================= */
+
+*:focus-visible {
+  outline: 2px solid var(--yc-color-primary);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.ant-card:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--yc-color-primary) 30%, transparent);
+}
+
+.ant-btn:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--yc-color-primary) 40%, transparent);
+}
+
+/* =========================
+   VISUALLY HIDDEN UTILITY
+   ========================= */
+
+.yc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================
+   SKIP LINK
+   ========================= */
+
+.yc-skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: var(--yc-color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: var(--yc-radius-sm, 4px);
+  font-weight: 500;
+}
+
+.yc-skip-link:focus {
+  left: 12px;
+  top: 12px;
+}
+
+/* =========================
+   REDUCED MOTION
+   ========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================
+   HIGH CONTRAST MODE
+   ========================= */
+
+@media (prefers-contrast: high) {
+  .ant-card {
+    border: 2px solid currentColor;
+  }
+
+  .ant-btn {
+    border: 2px solid currentColor;
+  }
+
+  .ant-tag {
+    border: 1px solid currentColor;
+  }
+
+  .ant-input,
+  .ant-select-selector {
+    border: 2px solid currentColor;
+  }
+}
+
+/* =========================
+   SCROLLBAR (Theme-aware)
+   ========================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

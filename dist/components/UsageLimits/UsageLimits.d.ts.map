@@ -1,0 +1,1 @@
+{"version":3,"file":"UsageLimits.d.ts","sourceRoot":"","sources":["../../../src/components/UsageLimits/UsageLimits.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAM1B,UAAU,gBAAgB;IACxB,OAAO,EAAE,MAAM,CAAC;IAChB,GAAG,EAAE,MAAM,GAAG,IAAI,CAAC;IACnB,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,CAAC,EAAE,OAAO,CAAC;CACnB;AAED,eAAO,MAAM,WAAW,EAAE,KAAK,CAAC,EAAE,CAAC,gBAAgB,CAkClD,CAAC"}
