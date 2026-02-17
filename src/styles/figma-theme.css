@@ -1,0 +1,643 @@
+/* Figma-like Comment System Styles */
+
+:root {
+  /* Figma colors — mapped to design system tokens (see tokens.css) */
+  --figma-primary: var(--yc-color-brand-700);
+  --figma-primary-hover: var(--yc-color-brand-800);
+  --figma-primary-light: var(--yc-color-brand-100);
+  --figma-purple: var(--yc-color-secondary-500);
+  --figma-purple-hover: var(--yc-color-secondary-600);
+  --figma-purple-light: var(--yc-color-secondary-100);
+  --figma-green: var(--yc-color-success);
+  --figma-bg: var(--yc-color-bg-container);
+  --figma-bg-secondary: var(--yc-color-bg-layout);
+  --figma-border: var(--yc-color-border);
+  --figma-text-primary: var(--yc-color-text);
+  --figma-text-secondary: var(--yc-color-text-secondary);
+  --figma-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --figma-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --figma-primary: var(--yc-color-brand-600);
+  --figma-primary-hover: var(--yc-color-brand-500);
+  --figma-primary-light: color-mix(in srgb, var(--yc-color-brand-700) 25%, transparent);
+  --figma-purple: var(--yc-color-secondary-400);
+  --figma-purple-hover: var(--yc-color-secondary-300);
+  --figma-purple-light: color-mix(in srgb, var(--yc-color-secondary-700) 25%, transparent);
+  --figma-green: var(--yc-color-success);
+  --figma-bg: var(--yc-color-bg-container);
+  --figma-bg-secondary: var(--yc-color-bg-layout);
+  --figma-border: var(--yc-color-border);
+  --figma-text-primary: var(--yc-color-text);
+  --figma-text-secondary: var(--yc-color-text-secondary);
+  --figma-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --figma-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+#yocoolab-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#yocoolab-root * {
+  box-sizing: border-box;
+}
+
+/* Comment Markers (Yocoolab logo shape) */
+.rc-marker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: all 0.15s ease;
+  z-index: 1000000;
+}
+
+.rc-marker:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+}
+
+.rc-marker.resolved {
+  opacity: 0.6;
+}
+
+.rc-marker.resolved:hover {
+  opacity: 0.8;
+}
+
+.rc-marker.active {
+  filter:
+    drop-shadow(0 0 3px var(--figma-purple-light))
+    drop-shadow(0 0 6px var(--figma-purple-light))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Marker pulse animation */
+.rc-marker.new {
+  animation: marker-pulse 2s infinite;
+}
+
+@keyframes marker-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Comment bubble preview (on hover) */
+.rc-marker-preview {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--figma-bg);
+  border: 1px solid var(--figma-border);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 280px;
+  box-shadow: var(--figma-shadow-lg);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000001;
+}
+
+.rc-marker:hover .rc-marker-preview {
+  opacity: 1;
+  transition-delay: 0.3s;
+}
+
+.rc-marker-preview::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--figma-bg);
+}
+
+.rc-marker-preview-content {
+  color: var(--figma-text-primary);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Side Panel (Figma-style) */
+.rc-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 360px;
+  height: 100vh;
+  background: var(--figma-bg);
+  border-left: 1px solid var(--figma-border);
+  box-shadow: var(--figma-shadow-lg);
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000002;
+}
+
+.rc-panel.open {
+  transform: translateX(0);
+}
+
+[data-position="left"] .rc-panel {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid var(--figma-border);
+  transform: translateX(-100%);
+}
+
+[data-position="left"] .rc-panel.open {
+  transform: translateX(0);
+}
+
+/* Panel Header */
+.rc-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--figma-border);
+  flex-shrink: 0;
+}
+
+.rc-panel-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--figma-text-primary);
+  margin: 0;
+}
+
+.rc-panel-close {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--figma-text-secondary);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.rc-panel-close:hover {
+  background: var(--figma-bg-secondary);
+  color: var(--figma-text-primary);
+}
+
+/* Panel Tabs */
+.rc-panel-tabs {
+  display: flex;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--figma-border);
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.rc-panel-tab {
+  background: none;
+  border: none;
+  padding: 12px 0;
+  cursor: pointer;
+  color: var(--figma-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.rc-panel-tab:hover {
+  color: var(--figma-text-primary);
+}
+
+.rc-panel-tab.active {
+  color: var(--figma-primary);
+  border-bottom-color: var(--figma-primary);
+}
+
+.rc-panel-tab-badge {
+  display: inline-block;
+  background: var(--figma-primary);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+/* Thread List */
+.rc-thread-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.rc-thread-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.rc-thread-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rc-thread-list::-webkit-scrollbar-thumb {
+  background: var(--figma-border);
+  border-radius: 4px;
+}
+
+.rc-thread-list::-webkit-scrollbar-thumb:hover {
+  background: var(--figma-text-secondary);
+}
+
+/* Thread Item */
+.rc-thread {
+  background: var(--figma-bg);
+  border: 1px solid var(--figma-border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rc-thread:hover {
+  border-color: var(--figma-primary);
+  box-shadow: var(--figma-shadow);
+}
+
+.rc-thread.active {
+  border-color: var(--figma-primary);
+  background: var(--figma-primary-light);
+}
+
+.rc-thread-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rc-avatar {
+  width: 28px;
+  height: 28px;
+  /* Full yocoolab logo shape: egg circle (brand-700) + corner triangle (secondary-700) */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 651 661' fill='none'%3E%3Cpath d='M244.009 190.732C279.836 179.091 318.428 179.091 354.255 190.732C390.082 202.372 421.305 225.057 443.447 255.533C465.589 286.009 477.514 322.713 477.514 360.384C477.514 398.054 465.589 434.757 443.447 465.233C421.305 495.71 390.082 518.394 354.255 530.035C318.428 541.675 279.836 541.675 244.009 530.035C208.182 518.394 176.96 495.709 154.818 465.233C132.676 434.757 120.75 398.054 120.75 360.384C120.75 322.713 132.676 286.009 154.818 255.533C176.96 225.057 208.182 202.372 244.009 190.732Z' fill='%23E64FA9'/%3E%3Cpath d='M505.485 271.745C482.848 219.489 441.25 177.358 389.367 154.03H505.485V271.745Z' fill='%236D29D9'/%3E%3C/svg%3E") no-repeat center / contain;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 3px;
+  padding-top: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.rc-avatar img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Align image with circle center */
+  margin-right: 2px;
+  margin-top: 2px;
+}
+
+.rc-thread-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.rc-thread-author {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--figma-text-primary);
+  margin-right: 6px;
+}
+
+.rc-thread-time {
+  font-size: 12px;
+  color: var(--figma-text-secondary);
+}
+
+.rc-thread-content {
+  color: var(--figma-text-primary);
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rc-thread-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--figma-text-secondary);
+}
+
+.rc-thread-replies {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rc-thread-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rc-thread-status.resolved {
+  color: var(--figma-green);
+}
+
+/* Thread Detail View */
+.rc-thread-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.rc-thread-detail-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--figma-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.rc-back-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--figma-text-secondary);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.rc-back-button:hover {
+  background: var(--figma-bg-secondary);
+  color: var(--figma-text-primary);
+}
+
+.rc-thread-detail-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+/* Message */
+.rc-message {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.rc-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.rc-message-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.rc-message-author {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--figma-text-primary);
+}
+
+.rc-message-time {
+  font-size: 12px;
+  color: var(--figma-text-secondary);
+}
+
+.rc-message-text {
+  color: var(--figma-text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  word-wrap: break-word;
+}
+
+/* Input */
+.rc-input-container {
+  padding: 16px 20px;
+  border-top: 1px solid var(--figma-border);
+  flex-shrink: 0;
+}
+
+.rc-input-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+.rc-input {
+  flex: 1;
+  border: 1px solid var(--figma-border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--figma-text-primary);
+  background: var(--figma-bg);
+  resize: none;
+  min-height: 36px;
+  max-height: 120px;
+  font-family: inherit;
+}
+
+.rc-input:focus {
+  outline: none;
+  border-color: var(--figma-primary);
+}
+
+.rc-input::placeholder {
+  color: var(--figma-text-secondary);
+}
+
+/* Buttons */
+.rc-button {
+  background: var(--figma-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rc-button:hover {
+  background: var(--figma-primary-hover);
+}
+
+.rc-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rc-button-secondary {
+  background: transparent;
+  color: var(--figma-text-primary);
+  border: 1px solid var(--figma-border);
+}
+
+.rc-button-secondary:hover {
+  background: var(--figma-bg-secondary);
+}
+
+/* Toggle Comments Button */
+.rc-toggle-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--figma-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--figma-shadow-lg);
+  pointer-events: auto;
+  transition: all 0.2s ease;
+  z-index: 1000001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rc-toggle-button:hover {
+  background: var(--figma-primary-hover);
+  transform: scale(1.05);
+}
+
+[data-position="left"] .rc-toggle-button {
+  right: auto;
+  left: 24px;
+}
+
+/* Empty state */
+.rc-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--figma-text-secondary);
+}
+
+.rc-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.rc-empty-text {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Category pill selector */
+.rc-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.rc-category-pill {
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--figma-border);
+  background: transparent;
+  color: var(--figma-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: capitalize;
+}
+
+.rc-category-pill:hover {
+  border-color: var(--figma-primary);
+  color: var(--figma-primary);
+}
+
+.rc-category-pill.active {
+  background: var(--figma-primary);
+  border-color: var(--figma-primary);
+  color: #fff;
+}
+
+/* Category badge in thread list */
+.rc-category-badge {
+  font-size: 11px;
+  text-transform: capitalize;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--figma-primary-light);
+  color: var(--figma-primary);
+}
+
+/* Click-intercept scrim (active during add-comment mode) */
+.rc-click-scrim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999998; /* below #yocoolab-root (999999), above all page content */
+  cursor: crosshair;
+  pointer-events: auto;
+  background: transparent;
+}
+
+/* Loading spinner */
+.rc-spinner {
+  border: 3px solid var(--figma-border);
+  border-top-color: var(--figma-primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
